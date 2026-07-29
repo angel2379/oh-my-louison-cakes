@@ -16,6 +16,10 @@ export async function POST(req: Request) {
       pay_to_email: "ohmylouisoncakes@gmail.com",
       description: "Commande Oh My Louison Cakes",
       merchant_code: "M3M835Q4",
+      redirect_url: "https://oh-my-louison-cakes.vercel.app",
+      hosted_checkout: {
+        enabled: true,
+      },
     }),
   });
 
