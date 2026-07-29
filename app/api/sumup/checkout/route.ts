@@ -21,8 +21,5 @@ export async function POST(req: Request) {
 
 const data = await response.json();
 
-return NextResponse.json({
-  status: response.status,
-  data,
-});
+return NextResponse.json(data);
 }
