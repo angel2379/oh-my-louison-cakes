@@ -39,8 +39,24 @@ export default function PanierPage() {
     localStorage.setItem("panier", JSON.stringify(nouveauPanier));
   }
   async function payerAvecSumUp() {
-    alert("La connexion SumUp est en cours de finalisation.");
+  const reponse = await fetch("/api/sumup/checkout", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      amount: total,
+    }),
+  });
+
+  const data = await reponse.json();
+
+  if (data.checkout_url) {
+    window.location.href = data.checkout_url;
+  } else {
+    alert("Erreur lors de la création du paiement.");
   }
+}
   return (
     <main className="min-h-screen bg-[#FFF9F8] py-12 px-6">
       <div className="max-w-4xl mx-auto">
