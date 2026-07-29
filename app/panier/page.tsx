@@ -50,8 +50,8 @@ export default function PanierPage() {
   });
 
   const data = await reponse.json();
-
-  alert(JSON.stringify(data, null, 2));
+  console.log(data);
+  window.location.href = data.hosted_checkout_url;
   }
   return (
     <main className="min-h-screen bg-[#FFF9F8] py-12 px-6">
