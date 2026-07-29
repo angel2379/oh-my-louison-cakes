@@ -23,7 +23,9 @@ type Dessert = {
 
 export default function PanierPage() {
   const [panier, setPanier] = useState<Dessert[]>([]);
-
+  const total = panier.reduce((somme, item) => {
+  return somme + item.prix;
+ }, 0);
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("panier") || "[]");
     setPanier(data);
@@ -36,7 +38,9 @@ export default function PanierPage() {
     setPanier(nouveauPanier);
     localStorage.setItem("panier", JSON.stringify(nouveauPanier));
   }
-
+  async function payerAvecSumUp() {
+    alert("La connexion SumUp est en cours de finalisation.");
+  }
   return (
     <main className="min-h-screen bg-[#FFF9F8] py-12 px-6">
       <div className="max-w-4xl mx-auto">
@@ -121,10 +125,16 @@ export default function PanierPage() {
         )}
         <div className="mt-10 bg-white rounded-3xl shadow-md p-6 text-right">
           <p className="text-3xl font-bold text-pink-600">
-             Total : {panier.reduce((total, item) => total + item.prix, 0)} €
+             Total : {total} €
            </p>
+           <button
+              onClick={payerAvecSumUp}
+              className="mt-6 w-full rounded-full bg-green-600 py-4 text-white font-bold hover:bg-green-700"
+            >
+              💳 Payer avec SumUp
+            </button>
          </div>
-         
+
       </div>
     </main>
   );
