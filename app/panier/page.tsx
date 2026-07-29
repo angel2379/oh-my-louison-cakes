@@ -51,12 +51,8 @@ export default function PanierPage() {
 
   const data = await reponse.json();
 
-  if (data.checkout_url) {
-    window.location.href = data.checkout_url;
-  } else {
-    alert("Erreur lors de la création du paiement.");
+  alert(JSON.stringify(data, null, 2));
   }
-}
   return (
     <main className="min-h-screen bg-[#FFF9F8] py-12 px-6">
       <div className="max-w-4xl mx-auto">
