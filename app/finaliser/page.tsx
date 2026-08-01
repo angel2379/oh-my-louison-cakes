@@ -3,26 +3,41 @@
 import { useEffect, useState } from "react";
 export default function FinaliserPage() {
  const [panier, setPanier] = useState<any[]>([]);
+ const [modeReception, setModeReception] = useState("Retrait en boutique");
+ const [adresse, setAdresse] = useState("");
+ const [codePostal, setCodePostal] = useState("");
+ const fraisLivraison =
+modeReception === "Livraison" ? 5 : 0;
 
+const total =
+panier.reduce((somme, dessert) => somme + dessert.prix, 0) +
+fraisLivraison;
+const codesIDF = ["75", "77", "78", "91", "92", "93", "94", "95"];
+
+const livraisonPossible =
+modeReception === "Retrait en boutique" ||
+codesIDF.includes(codePostal.substring(0, 2));
 useEffect(() => {
 const data = JSON.parse(localStorage.getItem("panier") || "[]");
 setPanier(data);
 }, []);   
 async function payerAvecSumUp() {
- const reponse = await fetch("/api/sumup/checkout", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify({
-    amount: panier.reduce((total, dessert) => total + dessert.prix, 0),
-  }),
+if (!livraisonPossible) {
+alert("Nous livrons uniquement en Île-de-France.");
+return;
+}
+const reponse = await fetch("/api/sumup/checkout", {
+method: "POST",
+headers: {
+"Content-Type": "application/json",
+},
+body: JSON.stringify({
+amount: total ,
+}),
 });
-  alert(
-    "Status : " + reponse.status +
-    "\n\n" +
-    (await reponse.text())
-  );
+
+const resultat = await reponse.json();
+window.location.href = resultat.data.hosted_checkout_url;
 }
 return (
 <main className="min-h-screen bg-[#FFF9F8] px-6 py-12">
@@ -66,10 +81,40 @@ className="border rounded-xl p-3 mt-4"
 Mode de réception
 </label>
 
-<select className="w-full border rounded-xl p-3">
+<select
+  value={modeReception}
+  onChange={(e) => setModeReception(e.target.value)}
+  className="w-full border rounded-xl p-3"
+>
 <option>Retrait en boutique</option>
 <option>Livraison</option>
 </select>
+{modeReception === "Livraison" && (
+<div className="space-y-4 mt-4">
+<input
+type="text"
+placeholder="Adresse"
+value={adresse}
+onChange={(e) => setAdresse(e.target.value)}
+className="w-full border rounded-xl p-3"
+/>
+
+<input
+type="text"
+placeholder="Code postal"
+value={codePostal}
+onChange={(e) => setCodePostal(e.target.value)}
+className="w-full border rounded-xl p-3"
+/>
+</div>
+)}
+{modeReception === "Livraison" &&
+codePostal.length >= 2 &&
+!livraisonPossible && (
+<p className="text-red-600 font-medium">
+Désolé, nous livrons uniquement en Île-de-France.
+</p>
+)}
 <div className="mt-4">
 <label className="block text-gray-700 font-medium mb-2">
 Date de retrait ou de livraison
@@ -107,7 +152,9 @@ Base : {dessert.base}
 </p>
 
 <p className="text-sm text-gray-500">
-Fruits : {dessert.fruits?.join(", ")}
+Fruits : {Array.isArray(dessert.fruits)
+? dessert.fruits.join(", ")
+: dessert.fruits}
 </p>
 
 <p className="text-sm text-gray-500">
@@ -121,7 +168,7 @@ Message : "{dessert.message}"
 <div className="flex justify-between text-xl font-bold pt-4">
 <span>Total</span>
 <span>
-{panier.reduce((total, dessert) => total + dessert.prix, 0)} €
+{total} €
 </span>
 </div>
 </div>
@@ -130,7 +177,12 @@ Message : "{dessert.message}"
 <div className="mt-8">
 <button
 onClick={payerAvecSumUp}
-className="w-full bg-pink-600 text-white py-4 rounded-full text-lg font-semibold"
+disabled={!livraisonPossible}
+className={`w-full py-4 rounded-full text-lg font-semibold text-white ${
+livraisonPossible
+? "bg-pink-600 hover:bg-pink-700"
+: "bg-gray-400 cursor-not-allowed"
+}`}
 >
 💳 Payer ma commande
 </button>
