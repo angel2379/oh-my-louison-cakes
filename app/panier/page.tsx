@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 "use client";
 
 import { useEffect, useState } from "react";
@@ -23,6 +24,7 @@ type Dessert = {
 
 export default function PanierPage() {
   const [panier, setPanier] = useState<Dessert[]>([]);
+  const router = useRouter();
   const total = panier.reduce((somme, item) => {
   return somme + item.prix;
  }, 0);
@@ -37,21 +39,6 @@ export default function PanierPage() {
 
     setPanier(nouveauPanier);
     localStorage.setItem("panier", JSON.stringify(nouveauPanier));
-  }
-  async function payerAvecSumUp() {
-  const reponse = await fetch("/api/sumup/checkout", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      amount: total,
-    }),
-  });
-
-  const data = await reponse.json();
-  console.log(data);
-  window.location.href = data.hosted_checkout_url;
   }
   return (
     <main className="min-h-screen bg-[#FFF9F8] py-12 px-6">
@@ -140,11 +127,12 @@ export default function PanierPage() {
              Total : {total} €
            </p>
            <button
-              onClick={payerAvecSumUp}
-              className="mt-6 w-full rounded-full bg-green-600 py-4 text-white font-bold hover:bg-green-700"
-            >
-              💳 Payer avec SumUp
-            </button>
+             onClick={() => router.push("/finaliser")}
+             className="mt-6 w-full rounded-full bg-pink-600 py-4 text-white rounded-full text-lg font-semibold"
+           >
+            Continuer
+           </button>
+
          </div>
 
       </div>

@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       pay_to_email: "ohmylouisoncakes@gmail.com",
       description: "Commande Oh My Louison Cakes",
       merchant_code: "M3M835Q4",
-      redirect_url: "https://oh-my-louison-cakes.vercel.app",
+      redirect_url: "https://oh-my-louison-cakes.vercel.app/merci",
       hosted_checkout: {
         enabled: true,
       },
@@ -25,5 +25,9 @@ export async function POST(req: Request) {
 
 const data = await response.json();
 
-return NextResponse.json(data);
+return NextResponse.json({
+  apiKeyExiste: !!process.env.SUMUP_API_KEY,
+  longueurCle: process.env.SUMUP_API_KEY?.length,
+  data,
+});
 }
