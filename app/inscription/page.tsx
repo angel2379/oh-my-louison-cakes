@@ -36,22 +36,28 @@ async function creerCompte() {
         </p>
 
         <input
-          type="text"
-          placeholder="Nom"
-          className="w-full border rounded-xl p-3 mb-4"
-        />
+  type="text"
+  placeholder="Nom"
+  value={nom}
+  onChange={(e) => setNom(e.target.value)}
+  className="w-full border rounded-xl p-3 mb-4"
+/>
 
         <input
-          type="email"
-          placeholder="Adresse e-mail"
-          className="w-full border rounded-xl p-3 mb-4"
-        />
+  type="email"
+  placeholder="Adresse e-mail"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full border rounded-xl p-3 mb-4"
+/>
 
         <input
-          type="password"
-          placeholder="Mot de passe"
-          className="w-full border rounded-xl p-3 mb-6"
-        />
+  type="password"
+  placeholder="Mot de passe"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  className="w-full border rounded-xl p-3 mb-6"
+/>
 
         <button
           onClick={creerCompte}
