@@ -84,7 +84,10 @@ priority
 
 <div className="flex items-center justify-end gap-5">
 <button
-  onClick={() => setCompteOuvert(!compteOuvert)}
+  onClick={() => {
+  console.log("clic");
+  setCompteOuvert(true);
+}}
   className="hover:scale-110 transition"
 >
   <User className="text-[#3F6663]" size={28} />
