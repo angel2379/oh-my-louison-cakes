@@ -20,7 +20,7 @@ async function connexion() {
   }
 
   alert("Connexion réussie 🎉");
-  router.push("/");
+  router.push("/commander");
 }
   return (
     <main className="min-h-screen bg-[#FFF8F7] flex items-center justify-center px-6">
