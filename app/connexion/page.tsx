@@ -19,7 +19,6 @@ async function connexion() {
     return;
   }
 
-  alert("Connexion réussie 🎉");
   router.push("/commander");
 }
   return (
