@@ -9,7 +9,13 @@ export default function Header() {
 const [nbArticles, setNbArticles] = useState(0);
 const [panierOuvert, setPanierOuvert] = useState(false);
 const [panier, setPanier] = useState<any[]>([]);
+function supprimerArticle(index: number) {
+  const nouveauPanier = [...panier];
+  nouveauPanier.splice(index, 1);
 
+  setPanier(nouveauPanier);
+  localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+}
 useEffect(() => {
 const chargerPanier = () => {
 const panier = JSON.parse(localStorage.getItem("panier") || "[]");
@@ -103,10 +109,16 @@ Votre panier est vide.
 panier.map((dessert: any, index: number) => (
 <div
 key={index}
-className="border-b pb-5 mb-5"
+className="relative border-b pb-5 mb-5"
 >
 <h3 className="font-bold text-lg">
 {dessert.dessert}
+<button
+  onClick={() => supprimerArticle(index)}
+  className="absolute top-2 right-2 text-red-500 text-xl hover:text-red-700"
+>
+  🗑️
+</button>
 </h3>
 
 <p className="text-gray-500">
