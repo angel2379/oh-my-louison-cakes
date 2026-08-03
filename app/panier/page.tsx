@@ -33,7 +33,7 @@ export default function PanierPage() {
     setPanier(data);
   }, []);
 
-  function supprimer(index: number) {
+  function supprimerArticle(index: number) {
     const nouveauPanier = [...panier];
     nouveauPanier.splice(index, 1);
 
@@ -55,9 +55,15 @@ export default function PanierPage() {
         ) : (
           panier.map((item, index) => (
             <div
-              key={index}
-              className="bg-white rounded-3xl shadow-md p-6 mb-6"
+             key={index}
+             className="relative bg-white rounded-3xl shadow-md p-6 mb-6"
             >
+              <button
+                onClick={() => supprimerArticle(index)}
+                className="absolute top-4 right-4 text-red-500 hover:text-red-700 text-2xl"
+            >
+              🗑️
+            </button>
               <h2 className="text-2xl font-bold mb-4">
                 🍰 {item.dessert}
               </h2>
@@ -114,7 +120,7 @@ export default function PanierPage() {
               <p><strong>Heure :</strong> {item.heure}</p>
 
               <button
-                onClick={() => supprimer(index)}
+                onClick={() => supprimerArticle(index)}
                 className="mt-6 bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-full"
               >
               🗑️ Supprimer
