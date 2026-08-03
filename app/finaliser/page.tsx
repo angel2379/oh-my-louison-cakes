@@ -1,5 +1,6 @@
 "use client";
 
+import { supabase } from "../../lib/supabase";
 import { useEffect, useState } from "react";
 export default function FinaliserPage() {
  const [panier, setPanier] = useState<any[]>([]);
@@ -26,6 +27,13 @@ if (!livraisonPossible) {
 alert("Nous livrons uniquement en Île-de-France.");
 return;
 }
+await supabase.from("commandes").insert({
+  nom: "Client",
+  dessert: panier.map((d) => d.dessert).join(", "),
+  prix: total,
+  date_retrait: "À confirmer",
+  statut: "En attente",
+});
 const reponse = await fetch("/api/sumup/checkout", {
 method: "POST",
 headers: {
