@@ -104,6 +104,27 @@ priority
 )}
 </button>
 </div>
+{compteOuvert && (
+  <div className="absolute top-16 right-4 bg-white shadow-xl rounded-2xl p-4 w-64 z-50">
+    <h3 className="font-bold text-[#3F6663] mb-3">
+      👤 Mon compte
+    </h3>
+
+    <Link
+      href="/connexion"
+      className="block w-full text-left py-2 hover:text-pink-500"
+    >
+      Se connecter
+    </Link>
+
+    <Link
+      href="/inscription"
+      className="block w-full text-left py-2 hover:text-pink-500"
+    >
+      Créer un compte
+    </Link>
+  </div>
+)}
 
 </div>
 </header>
