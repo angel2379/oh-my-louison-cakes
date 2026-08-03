@@ -1,4 +1,29 @@
+"use client";
+import { useState } from "react";
+import { supabase } from "../../lib/supabase";
 export default function Inscription() {
+const [nom, setNom] = useState("");
+const [email, setEmail] = useState("");
+const [password, setPassword] = useState("");
+async function creerCompte() {
+  const { error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        nom,
+      },
+    },
+  });
+
+  if (error) {
+    alert(error.message);
+  } else {
+    alert(
+      "Compte créé avec succès ! Vérifiez votre boîte e-mail pour confirmer votre compte."
+    );
+  }
+}
   return (
     <main className="min-h-screen bg-[#FFF8F7] flex items-center justify-center px-6">
       <div className="bg-white rounded-3xl shadow-xl p-8 w-full max-w-md">
@@ -28,7 +53,10 @@ export default function Inscription() {
           className="w-full border rounded-xl p-3 mb-6"
         />
 
-        <button className="w-full bg-pink-600 hover:bg-pink-700 text-white rounded-xl py-3 font-bold transition">
+        <button
+          onClick={creerCompte}
+          className="w-full bg-pink-600 hover:bg-pink-700 text-white rounded-xl py-3 font-bold transition"
+        >
           Créer mon compte
         </button>
       </div>
