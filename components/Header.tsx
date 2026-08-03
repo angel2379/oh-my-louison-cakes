@@ -3,19 +3,39 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Menu, ShoppingBag, Search } from "lucide-react";
+import {
+  Menu,
+  ShoppingBag,
+  User,
+  X,
+  Home,
+  Cake,
+  Package,
+  Info,
+  Phone,
+  FileText,
+  Shield,
+} from "lucide-react";
 
 export default function Header() {
 const [nbArticles, setNbArticles] = useState(0);
 const [panierOuvert, setPanierOuvert] = useState(false);
-const [panier, setPanier] = useState<any[]>([]);
+const [menuOuvert, setMenuOuvert] = useState(false);
+const [compteOuvert, setCompteOuvert] = useState(false);
+const [panier, setPanier] = useState<any[]>([])
 function supprimerArticle(index: number) {
   const nouveauPanier = [...panier];
   nouveauPanier.splice(index, 1);
 
   setPanier(nouveauPanier);
-  localStorage.setItem("panier", JSON.stringify(nouveauPanier));
+  setNbArticles(nouveauPanier.length);
+
+  localStorage.setItem(
+    "panier",
+    JSON.stringify(nouveauPanier)
+  );
 }
+
 useEffect(() => {
 const chargerPanier = () => {
 const panier = JSON.parse(localStorage.getItem("panier") || "[]");
@@ -63,13 +83,17 @@ priority
 </div>
 
 <div className="flex items-center justify-end gap-5">
-<Search className="text-[#3F6663]" size={28} />
 <button
-onClick={() => setPanierOuvert(true)}
-className="relative"
+  onClick={() => setCompteOuvert(!compteOuvert)}
+  className="hover:scale-110 transition"
 >
-<ShoppingBag className="text-[#3F6663]" size={28} />
-
+  <User className="text-[#3F6663]" size={28} />
+</button>
+<button
+  onClick={() => setPanierOuvert(true)}
+  className="relative"
+ > 
+ <ShoppingBag className="text-[#3F6663]" size={28} />
 {nbArticles > 0 && (
 <span className="absolute -top-3 -right-3 bg-pink-600 text-white rounded-full w-7 h-7 text-sm font-bold flex items-center justify-center shadow-lg border-2 border-white">
 {nbArticles}
@@ -221,6 +245,28 @@ className="block w-full text-center bg-pink-600 text-white py-4 rounded-xl font-
 </Link>
 
 </div>
+{compteOuvert && (
+  <div className="absolute top-16 right-4 bg-white shadow-xl rounded-2xl p-4 w-64 z-50">
+
+    <h3 className="font-bold text-[#3F6663] mb-3">
+      👤 Mon compte
+    </h3>
+
+   <Link
+     href="/connexion"
+     className="block w-full text-left py-2 hover:text-pink-500"
+   >
+     Se connecter
+   </Link>
+
+   <Link
+     href="/inscription"
+     className="block w-full text-left py-2 hover:text-pink-500"
+   >
+     Créer un compte
+    </Link>
+  </div>
+)}
 </div>
 </>
 )}
